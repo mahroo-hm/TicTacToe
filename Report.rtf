@@ -1,0 +1,130 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2759
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Avenir-Heavy;\f1\fnil\fcharset0 Avenir-Book;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid2\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\margl1440\margr1440\vieww19280\viewh12340\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs40 \cf0 TicTacToe with server/client and multithreading:\
+
+\f1\b0\fs32 \
+This project consists of three distinct files: `server.py`, `player.py` (which acts as the client), and `game.py`, containing the TicTacToe game logic. Below is an overview of the composition and classes within each file:\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf0 server.py
+\f1\b0 \
+	|_ class ClientServer\
+	|	|_ def __init__(self, _id, _clientSocket)\
+    	|	|_ def setMode(self, _mode)\
+	|_ class Server()\
+		|_ def __init__(self)\
+  		|_ def flushClientBuffer(self, clientSocket)\
+    		|_ def startListening(self)\
+    		|_ def startAccepting(self)\
+    		|_ def addClient(self, clientServer)\
+    		|_ def endConnection(self, clientServer)\
+    		|_ def closeConnection(self)\
+    		|_ def multiPrint(self, str)\
+    		|_ def sendMessage(self, _clientSocket, message)\
+    		|_ def loginClient(self, clientServer)\
+    		|_ def handleClient(self, clientServer)\
+    		|_ def handleClientReq(self, clientServer)\
+    		|_ def showGameList(self, clientSock)\
+    		|_ def reqOpponent(self, clientServer)\
+    		|_ def initializeGame(self, p1, p2)\
+    		|_ def isValid(self, game, x, y)\
+\pard\pardeftab560\slleading20\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b \cf0 player.py
+\f1\b0 \
+	|_ class Player\
+		|_ def __init__(self, _id)\
+    		|_ def setUsername(self, _username)\
+    		|_ def setMode(self, _mode)    \
+    		|_ def setSymbol(self, _symbol)\
+    		|_ def setState(self, _state)\
+    		|_ def startConnecting(self)\
+    		|_ def startCommunicating(self)\
+    		|_ def multiPrint(self, message="")\
+    		|_ def sendHandler(self)\
+    		|_ def recvHandler(self)\
+\
+
+\f0\b game.py
+\f1\b0 \
+	|_ class Player\
+    	|	|_ def __init__(self, _username, _symbol)\
+	|_ class XOGame\
+		|_ def __init__(self, _mode, _gameID, _p1, _p2)\
+		|_ def setBoardLayout(self)\
+ 		|_  def changeTurns(self)\
+    		|_ def updateStatusText(self)\
+   		|_ def isGameOver(self)\
+   		|_ def showBoard(self)\
+  		|_ def changeState(self, _p, _state)\
+   		|_ def startGame(self)\
+   		|_ def makeMove(self, event)\
+   		|_ def generateWinningCombinations(self)\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 The description of each method for each class is explained within the `.py` files through comments. Before diving into the game's mechanics, it's crucial to understand some fundamental concepts including server/client architecture, threading, locks, and sockets. The upcoming section provides an overview of these essential topics:\
+\
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\b\fs40 \cf0 Server and Client\
+
+\f1\b0\fs32 In computing, a server is a computer program or device that provides a service to another computer program and its user, known as the client. In a network, the server can share data, resources, services, or programs among multiple clients or perform computation for a client. A client is a computer program that accesses services or resources provided by the server.\
+It is important to note that server and client are 2 completely separate programs and server does not have accessibility to classes and functions of the client. for example imagine the scenario when a client sets its mode to \'91Available\'92. even if server has imported the file headers and classes, it can not use the mode variable in each threat of client to make changes in its own program. to solve this problem the server should have its own \'91Player\'92 object to save the state of the client for further reference. the same goes for \'91game.py\'92.\
+\
+
+\f0\b\fs40 Socket
+\f1\b0\fs32 \
+A socket is an endpoint of a two-way communication link between two programs running on the network. It is a combination of an IP address and a port and provides a mechanism for services to connect to them over a network and for data to be transferred back and forth. The socket makes it possible for a server to simultaneously communicate with multiple clients and for clients to communicate with servers or other clients. \
+\
+
+\f0\b\fs40 Threading
+\f1\b0\fs32 \
+Threading is a method of dividing a program\'92s tasks into multiple concurrent threads (mini-processes) that can run simultaneously. This can improve the efficiency and performance of a program, especially in applications that require heavy I/O operations or that can easily be divided into multiple tasks that can run in parallel. Threads share the same memory space within the process they belong to, making data sharing between threads efficient but requiring careful synchronization to avoid conflicts. This was the major concern while coding the program!\
+\
+
+\f0\b\fs40 Locks
+\f1\b0\fs32 \
+Locks are the primary tool used for synchronization in threading. A lock allows only one thread to access a resource or execute a block of code at a time, ensuring data integrity and consistency. Here\'92s how they work and when they are used:\
+\pard\pardeftab560\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8226 	}Purpose of Locks: Locks prevent multiple threads from modifying a shared resource simultaneously. For example, when two threads try to update the same global variable concurrently, using a lock ensures that one thread completes its operation before the other begins. This is important when we are trying to update the state of the game (turns) and also when setting players states (available/busy). in the second case if player 1 state does not equal busy at the right time, 2 players might end up playing with player 1.\
+{\listtext	\uc0\u8226 	}How Locks Are Used: A thread will \'93acquire\'94 a lock before accessing shared resources. If the lock is already held by another thread, the requesting thread will wait until the lock is released. Once the lock is acquired and the resource is used, the thread will \'93release\'94 the lock, making it available to other threads. the code has used \'91with lock:\'92 mechanism which automatically acquires and release the lock when the snippet of code finished its execution.\
+{\listtext	\uc0\u8226 	}When to Use Locks:\
+\pard\pardeftab560\pardirnatural\partightenfactor0
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8226 	}Protecting Shared Data: Whenever there\'92s shared data or resources among threads that can be modified, locks are used to ensure that only one thread at a time can change the data.\
+{\listtext	\uc0\u8226 	}Ordering Operations: Sometimes, the sequence of operations is critical. Locks can ensure that certain operations by different threads happen in a controlled and predictable order.\
+{\listtext	\uc0\u8226 	}Atomic Operations: To ensure that operations which need to be executed as a single uninterrupted unit (atomic) can be completed without interference from other threads.\
+\pard\pardeftab560\slleading20\partightenfactor0
+\cf0 Locks are essential for data integrity, but they must be used judiciously to prevent issues like deadlock, where two or more threads wait indefinitely for each other to release locks, and to minimize performance bottlenecks associated with excessive locking and unlocking operations.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+\
+
+\f0\b\fs40 game.py:\
+
+\f1\b0\fs32 I started by coding `game.py`, which was relatively straightforward. The game consists of a square grid (n x n) for two players who take turns. To determine if the game has ended, there are two methods:\
+1. Checking if a player's move forms a winning line (either straight or diagonal).\
+2. Scanning the entire board for any winning patterns based on a predefined list of combinations.\
+\
+I chose the second option. The coordinates leading to a win are stored in a tuple.\
+\
+
+\f0\b\fs40 client.py
+\f1\b0\fs32 :\
+The client's job is to connect to the server and send messages only when prompted. If it sends messages at other times, the server will ignore these. Therefore, I designed functions specifically for sending and receiving messages. To improve user experience, it's advisable to use two threads; one for sending and the other for receiving.\
+\
+
+\f0\b\fs40 server.py:
+\f1\b0\fs32 \
+The server basically does all the heavy lifting. It must accept connections from clients, storing their address and socket for later use. It's tasked with pairing a newly connected player with an opponent who has chosen the same game mode. If a suitable opponent is found, they start a game. Meanwhile, any clients that connect without available opponents (because existing players are marked as busy) will have to wait until the server can find them a match.\
+The server manages the game moves through the `makeMove()` method from the `GameXO` class in `game.py`. It continuously checks to ensure neither player has disconnected. If a player exits, the server informs the other player and terminates the game. Otherwise, the game continues until there's a win or a draw. Once the game concludes, both players are logged out and must log in again to play another round.}
